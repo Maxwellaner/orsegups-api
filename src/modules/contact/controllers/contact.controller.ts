@@ -4,11 +4,12 @@ import validationMiddleware from '../../../middleware/validation.middleware';
 import validate from '../schemas/contact.schema';
 import HttpException from "../../../utils/exceptions/http.exception";
 import ContactService from "../services/contact.service";
-
+import ContactRepository from "../repository/contactRepository";
 export default class ContactController implements Controller {
   public path = '/contacts'
   public router = Router();
-  private contactService = new ContactService();
+  private repository = new ContactRepository();
+  private contactService = new ContactService(this.repository);
 
   constructor() {
     this.initializeRoutes();
@@ -16,7 +17,7 @@ export default class ContactController implements Controller {
 
   private initializeRoutes(): void {
     this.router.post(
-      `${this.path}/create`, 
+      `${this.path}/create`,
       validationMiddleware(validate.create),
       this.create
     )

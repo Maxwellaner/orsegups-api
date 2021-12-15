@@ -1,25 +1,25 @@
-import Contact from "../models/contact.model";
+import IContactRepository from "../interface/IContactRepository";
+import Contact from "../../../sequelize-models/contact.model";
 
 export default class ContactService {
-  private contact = Contact;
+  constructor(private readonly repository: IContactRepository) {}
 
-  public async create(body: string): Promise<Contact> {
-    try {
-      return await Contact.create(body);
-    } catch(e) {
-      throw new Error('Unable to create contact');
-    }
+  public async create(contact: Contact): Promise<Contact> {
+    if (await this.repository.checkIfContactExists(contact)) throw new Error('Contact already exists');
+    const response = await this.repository.create(contact);
+    contact.id = response.id;
+    return contact;
   }
 
-  public async getById(id: number): Promise<Contact | null> {
-    return await Contact.findByPk(id);
+  public async getById(id: number): Promise<Contact | null | undefined> {
+    return await this.repository.findByPk(id);
   }
 
   public async getAll(): Promise<Contact[]> {
-    return await Contact.findAll();
+    return await this.repository.findAll();
   }
 
-  public async getByEmail(email: string): Promise<Contact | null> {
-    return await Contact.findOne({ where: {email} });
+  public async getByEmail(email: string): Promise<Contact | null | undefined> {
+    return await this.repository.findOne(email);
   }
 }

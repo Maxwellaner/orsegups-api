@@ -4,9 +4,9 @@ import sequelize from '../../../database/connection';
 
 const Model = Sequelize.Model;
 
-class Contact extends Model {}
+class SequelizeContact extends Model {}
 
-Contact.init(
+SequelizeContact.init(
   {
     id: {
       type: Sequelize.INTEGER,
@@ -38,4 +38,4 @@ Contact.init(
   }
 )
 
-export default Contact;
+export default SequelizeContact;
