@@ -1,4 +1,4 @@
-import Contact from "../Models/contact.model";
+import Contact from "../models/contact.model";
 
 export default class ContactService {
   private contact = Contact;

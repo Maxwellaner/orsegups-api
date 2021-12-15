@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
 import Controller from "../../../utils/interfaces/controller.interface";
 import validationMiddleware from '../../../middleware/validation.middleware';
-import validate from '../Schemas/contact.schema';
+import validate from '../schemas/contact.schema';
 import HttpException from "../../../utils/exceptions/http.exception";
-import ContactService from "../Services/contact.service";
+import ContactService from "../services/contact.service";
 
 export default class ContactController implements Controller {
   public path = '/contacts'
