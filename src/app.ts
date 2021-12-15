@@ -3,14 +3,14 @@ import cors from 'cors';
 
 import Controller from './utils/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
+import sequelize from './database/connection';
 
-export default class App {
+import ContactController from './modules/contact/controllers/contact.controller';
+class App {
   public express: Application;
-  public port: number;
 
-  constructor(controllers: Controller[], port: number) {
+  constructor(controllers: Controller[]) {
     this.express = express();
-    this.port = port;
 
     this.initialize();
     this.initializeControllers(controllers);
@@ -21,6 +21,7 @@ export default class App {
     this.express.use(express.json());
     this.express.use(cors());
     this.express.use(express.urlencoded({ extended: false }));
+    sequelize.sync();
   }
 
   private initializeControllers(controllers: Controller[]): void {
@@ -32,10 +33,6 @@ export default class App {
   private initializaErrorHandler(): void {
     this.express.use(ErrorMiddleware);
   }
-
-  public listen(): void {
-    this.express.listen(this.port, () => {
-      console.log(`Listening on port ${this.port}`);
-    })
-  }
 }
+
+export default new App([new ContactController()]).express;
