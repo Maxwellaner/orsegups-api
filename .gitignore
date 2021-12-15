@@ -3,3 +3,5 @@ node_modules
 db.sqlite
 yarn-error.log
 yarn.lock
+coverage
+*.sqlite
