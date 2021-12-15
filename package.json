@@ -5,7 +5,7 @@
   "author": "Maxwell Laner <maxwellaner@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --respawn --tranpileOnly --ignore-watch node_modules --no-notify src/main.ts",
+    "dev": "ts-node-dev --respawn --ignore-watch node_modules --no-notify src/main.ts",
     "test": "jest"
   },
   "devDependencies": {
@@ -19,7 +19,11 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "joi": "^17.5.0"
+    "joi": "^17.5.0",
+    "sequelize": "*",
+    "sqlite3": "^5.0.2",
+    "tslib": "^2.3.1"
   }
 }
