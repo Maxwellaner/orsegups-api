@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import HttpException from '../utils/exceptions/http.exception';
 
-type errorMiddlewareProps = {
+type ErrorMiddlewareProps = {
   error: HttpException;
-  req: Request;
   res: Response;
-  next: NextFunction;
 }
 
-export default function errorMiddleware({ error, next, req, res }: errorMiddlewareProps): void {
+export default function ErrorMiddleware({ error, res }: ErrorMiddlewareProps): void {
   const status = error.status || 500;
-  const message = error.message || 'Algo inesperado aconteceu';
+  const message = error.message || 'Something unexpected happened';
 
   res.status(status).send({
     status, message
