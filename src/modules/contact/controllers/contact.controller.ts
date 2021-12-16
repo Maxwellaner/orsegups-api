@@ -20,22 +20,29 @@ export default class ContactController implements Controller {
       `${this.path}/create`,
       validationMiddleware(validate.create),
       this.create
-    )
+    );
     this.router.get(
       `${this.path}`,
       this.getAll
-    )
+    );
     this.router.get(
       `${this.path}/:id`,
       this.get
-    )
+    );
+    this.router.put(
+      `${this.path}/:id`,
+      validationMiddleware(validate.put),
+      this.put
+    );
+    this.router.delete(
+      `${this.path}/:id`,
+      this.delete
+    );
   }
 
   private create = async(req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
       const { body } = req;
-      const exists = await this.contactService.getByEmail(body.email);
-      if (exists) return res.status(400).send({ message: 'Contact already exists' })
       const contact = await this.contactService.create(body);
       res.status(201).json({ contact: contact });
     } catch(e) {
@@ -45,12 +52,26 @@ export default class ContactController implements Controller {
 
   private get = async(req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     const contact = await this.contactService.getById(Number(req.params.id));
-    if (!contact) res.status(400).send({ message: 'Invalid contact id' });
     res.send(contact);
   }
 
   private getAll = async(req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     const contacts = await this.contactService.getAll();
     res.send(contacts);
+  }
+
+  private put = async(req: Request, res: Response, next: NextFunction) : Promise<Response | void> => {
+    const { body } = req;
+    const contact = await this.contactService.put(Number(req.params.id), body);
+    res.send(contact);
+  }
+
+  private delete = async(req: Request, res: Response, next: NextFunction) : Promise<Response | void> => {
+    try {
+      await this.contactService.delete(Number(req.params.id));
+      res.status(200);
+    } catch(e) {
+      next(new HttpException(400, 'An error occurred, please try again later'));
+    }
   }
 }
