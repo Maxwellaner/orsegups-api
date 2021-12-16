@@ -1,15 +1,17 @@
 import Joi from 'joi';
-import ContactEnum from '../../../enums/contactEnum';
 
 const create = Joi.object({
   name: Joi.string().required(),
-  contactType: Joi.string().valid('familiar', 'professional', 'friend'),
+  contactType: Joi.string().valid('familiar', 'professional', 'friend').required(),
   email: Joi.string().email().required(),
-  phone: Joi.string().length(11).pattern(/^[0-9]+$/)
+  phone: Joi.string().length(11).pattern(/^[0-9]+$/).required()
 });
 
-const get = Joi.object({
-  id: Joi.number().required()
+const put = Joi.object({
+  name: Joi.string(),
+  contactType: Joi.string().valid('familiar', 'professional', 'friend'),
+  email: Joi.string().email(),
+  phone: Joi.string().length(11).pattern(/^[0-9]+$/)
 })
 
-export default { create }
+export default { create, put }
