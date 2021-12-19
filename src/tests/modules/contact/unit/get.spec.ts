@@ -3,7 +3,7 @@ import IContactRepository from "../../../../modules/contact/interface/IContactRe
 import ContactService from "../../../../modules/contact/services/contact.service";
 import Contact from "../../../../sequelize-models/contact.model";
 
-describe("Get contacts", () => {
+describe("Unit - Get contacts", () => {
   let mockRepository: IContactRepository;
   let service: ContactService;
 
@@ -19,13 +19,13 @@ describe("Get contacts", () => {
       contactType: 'familiar',
       email: 'unit-get@gmail.com',
       phone: '53991039232'
-    });
+    }) as Contact;
     secondContact = await service.create({
       name: 'Unit get 2',
       contactType: 'familiar',
       email: 'unit-get2@gmail.com',
       phone: '53991039232'
-    });
+    }) as Contact;
   });
   it("should be able to get a contact", async () => {
     const contact = await service.getById(Number(firstContact.id));
