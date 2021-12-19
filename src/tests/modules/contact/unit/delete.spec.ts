@@ -28,6 +28,6 @@ describe("Unit - Delete contact", () => {
   it("should not be able to delete a unexisting contact", async () => {
     const contact = await service.delete(2);
 
-    expect(contact).toBe(null);
+    expect(contact).toBe("Este contato não existe!");
   });
 })

@@ -1,7 +1,7 @@
 enum ContactEnum {
-  friend,
-  professional,
-  familiar
+  'friend',
+  'professional',
+  'familiar'
 }
 
 export default ContactEnum;

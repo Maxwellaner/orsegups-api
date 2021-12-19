@@ -74,11 +74,11 @@ export default class ContactController implements Controller {
   }
 
   private delete = async(req: Request, res: Response, next: NextFunction) : Promise<Response | void> => {
-    const contact = await this.contactService.delete(Number(req.params.id));
-    if (!contact) {
-      res.status(400).json({ message: 'Este e-mail já existe!' });
+    const response = await this.contactService.delete(Number(req.params.id));
+    if (typeof response === 'string') {
+      res.status(400).json({ message: response });
     } else {
-      res.status(200);
+      res.status(200).send(response);
     }
   }
 }

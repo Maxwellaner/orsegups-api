@@ -36,9 +36,9 @@ export default class ContactService {
     return await this.repository.put(id, dto);
   }
 
-  public async delete(id: number): Promise<Contact | null> {
+  public async delete(id: number): Promise<Contact | string> {
     const exists = await this.getById(id);
-    if (!exists) return null;
+    if (!exists) return 'Este contato não existe!';
     await this.repository.delete(id);
     return exists;
   }
