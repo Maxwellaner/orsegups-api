@@ -12,7 +12,8 @@ export default class ContactRepository implements IContactRepository {
     return (await SequelizeContact.findByPk(id))?.toJSON();
   }
   async findOne(email: string): Promise<Contact | null | undefined> {
-    return (await SequelizeContact.findOne({ where: { email } }))?.toJSON();
+    const contact = (await SequelizeContact.findOne({ where: { email } }))?.toJSON();
+    return contact as Contact;
   }
   async findAll(): Promise<Contact[]> {
     const contacts: Contact[] = [];

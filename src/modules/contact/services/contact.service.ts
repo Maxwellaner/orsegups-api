@@ -1,22 +1,20 @@
 import IContactRepository from "../interface/IContactRepository";
 import Contact from "../../../sequelize-models/contact.model";
-import { PutDto } from "../dto/create.dto";
+import { CreateDto, PutDto } from "../dto/create.dto";
 
 export default class ContactService {
   constructor(private readonly repository: IContactRepository) {}
 
-  public async create(contact: Contact): Promise<Contact> {
+  public async create(contact: CreateDto): Promise<Contact | null> {
     const exists = await this.getByEmail(contact.email);
-    if (exists) throw new Error('Contact already exists');
+    if (exists) return null;
     const response = await this.repository.create(contact);
     contact.id = response.id;
     return contact;
   }
 
   public async getById(id: number): Promise<Contact | null | undefined> {
-    const contact = await this.repository.findByPk(id);
-    if (!contact) throw new Error('Contact dont exists');
-    return contact;
+    return await this.repository.findByPk(id);
   }
 
   public async getAll(): Promise<Contact[]> {
@@ -27,15 +25,21 @@ export default class ContactService {
     return await this.repository.findOne(email);
   }
 
-  public async put(id: number, dto: PutDto): Promise<Contact> {
-    if (!id) throw new Error('Invalid contact identifier');
-    await this.getById(id);
+  public async put(id: number, dto: PutDto): Promise<Contact | string> {
+    const exists = await this.getById(id);
+    if (!exists) return 'Este contato não existe!';
+    if (dto.email) {
+      const existingEmail = await this.getByEmail(dto.email);
+      if (exists?.email !== dto.email)
+        if (existingEmail) return 'Este e-mail já existe! Confira na lista de contatos';
+    }
     return await this.repository.put(id, dto);
   }
 
-  public async delete(id: number): Promise<void> {
-    if (!id) throw new Error('Invalid contact identifier');
-    await this.getById(id);
-    return await this.repository.delete(id);
+  public async delete(id: number): Promise<Contact | null> {
+    const exists = await this.getById(id);
+    if (!exists) return null;
+    await this.repository.delete(id);
+    return exists;
   }
 }
