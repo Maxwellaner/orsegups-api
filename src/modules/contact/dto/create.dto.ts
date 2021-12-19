@@ -1,4 +1,5 @@
 type CreateDto = {
+  id?: number;
   name: string;
   contactType: string;
   phone: string;
